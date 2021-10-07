@@ -1,10 +1,10 @@
 {
-    "name": "@nativescript-community/plugin-seed",
+    "name": "@abbieben/webview-interface",
     "version": "0.0.1",
     "description": "This is the description for the plugin seed. This is what will be published to NPM.",
-    "main": "./plugin-seed",
+    "main": "./webview-interface",
     "sideEffects": false,
-    "typings": "./plugin-seed.d.ts",
+    "typings": "./webview-interface.d.ts",
     "nativescript": {
         "platforms": {
             "android": "6.0.0",
@@ -22,11 +22,11 @@
         "Vue"
     ],
     "bugs": {
-        "url": "https://github.com/nativescript-community/plugin-seed/issues"
+        "url": "https://github.com/abbieben/webview-interface/issues"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/nativescript-community/plugin-seed"
+        "url": "https://github.com/abbieben/webview-interface"
     },
     "license": "Apache-2.0",
     "readmeFilename": "README.md"

@@ -1,19 +1,33 @@
 <template>
-    <Page>
-        <ActionBar>
-            <NavigationButton text="Back" android.systemIcon="ic_menu_back" @tap="$navigateBack" />
-            <Label text="Demo 1" />
-        </ActionBar>
+	<Page>
+		<ActionBar>
+			<NavigationButton text="Back" android.systemIcon="ic_menu_back" @tap="$navigateBack" />
+			<Label text="Demo 1" />
+		</ActionBar>
 
-        <StackLayout>
-            <Label text="The version is:" />
-            <VersionNumber />
-        </StackLayout>
-    </Page>
+		<StackLayout>
+			<WebView ref="web" src="~/assets/www/index.html" />
+		</StackLayout>
+	</Page>
 </template>
 
 <script>
-export default {};
+import { WebViewInterface } from '@abbieben/webview-interface';
+export default {
+	mounted() {
+		console.dir(com.novacio)
+		const webview = this.$refs.web.nativeView;
+		const WVInterface = new WebViewInterface(webview);
+		WVInterface.start().then(() => {
+			WVInterface.runJSFunc('happy', { msg: 'okay' });
+		});
+	}
+};
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+WebView {
+	width: 100%;
+	height: 100%;
+}
+</style>
