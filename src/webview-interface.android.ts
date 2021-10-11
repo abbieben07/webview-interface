@@ -25,13 +25,17 @@ export class WebViewInterface extends WebViewInterfaceCommon {
         (this.webView.nativeViewProtected as android.webkit.WebView).addJavascriptInterface(JSInterface, "Android");
     }
 
-    runJSFunc(fname: string, arg: Object, callback: (data: string) => void) {
-        const data = JSON.stringify(arg);
-        console.log(`javascript: ${fname}()`, Device.sdkVersion);
+    runJSFunc(fname: string, arg: Object, callback: (data: Object[] | Object) => void) {
+        const params = JSON.stringify(arg);
+        if (callback) {
+            this.once(fname, ({ data }) => callback(data));
+        }
+        const caller = `Bridge.call('${fname}', '${params}');`;
+        console.log(caller);
         if (Device.sdkVersion >= '19') {
-            (this.webView.nativeView as android.webkit.WebView).evaluateJavascript(`${fname}('${data}');`, null)
+            (this.webView.nativeView as android.webkit.WebView).evaluateJavascript(caller, null)
         } else {
-            (this.webView.nativeView as android.webkit.WebView).loadUrl(`javascript: ${fname}(${data});`)
+            (this.webView.nativeView as android.webkit.WebView).loadUrl(`javascript: ${caller}`)
         }
     }
 }
@@ -49,4 +53,4 @@ class JavascriptInterface extends com.novacio.WebviewInterface {
         const data = webViewInterface.parseJSON(jsonData);
         webViewInterface.emit(eventName, data);
     }
-} 
+}  

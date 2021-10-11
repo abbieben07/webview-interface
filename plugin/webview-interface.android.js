@@ -19,29 +19,32 @@ export class WebViewInterface extends WebViewInterfaceCommon {
         this.webView.nativeViewProtected.addJavascriptInterface(JSInterface, "Android");
     }
     runJSFunc(fname, arg, callback) {
-        const data = JSON.stringify(arg);
-        console.log(`javascript: ${fname}()`, Device.sdkVersion);
+        const params = JSON.stringify(arg);
+        if (callback) {
+            this.once(fname, ({ data }) => callback(data));
+        }
+        const caller = `Bridge.call('${fname}', '${params}');`;
+        console.log(caller);
         if (Device.sdkVersion >= '19') {
-            this.webView.nativeView.evaluateJavascript(`${fname}('${data}');`, null);
+            this.webView.nativeView.evaluateJavascript(caller, null);
         }
         else {
-            this.webView.nativeView.loadUrl(`javascript: ${fname}(${data});`);
+            this.webView.nativeView.loadUrl(`javascript: ${caller}`);
         }
     }
 }
-let JavascriptInterface = class JavascriptInterface extends com.novacio.WebviewInterface {
-    constructor(webViewInterface) {
-        super();
-        this.webViewInterface = webViewInterface;
-        return global.__native(this);
+var JavascriptInterface = /** @class */ (function (_super) {
+    __extends(JavascriptInterface, _super);
+    function JavascriptInterface(webViewInterface) {
+        var _this = _super.call(this) || this;
+        _this.webViewInterface = webViewInterface;
+        return global.__native(_this);
     }
-    _emit(eventName, jsonData) {
-        const webViewInterface = this.webViewInterface.get();
-        const data = webViewInterface.parseJSON(jsonData);
+    JavascriptInterface.prototype._emit = function (eventName, jsonData) {
+        var webViewInterface = this.webViewInterface.get();
+        var data = webViewInterface.parseJSON(jsonData);
         webViewInterface.emit(eventName, data);
-    }
-};
-JavascriptInterface = __decorate([
-    NativeClass()
-], JavascriptInterface);
+    };
+    return JavascriptInterface;
+}(com.novacio.WebviewInterface));
 //# sourceMappingURL=webview-interface.android.js.map

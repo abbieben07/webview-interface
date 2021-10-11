@@ -12,14 +12,20 @@
 </template>
 
 <script>
+import { knownFolders } from '@nativescript/core';
 import { WebViewInterface } from '@abbieben/webview-interface';
 export default {
 	mounted() {
-		console.dir(com.novacio)
+		console.log(
+			knownFolders
+				.currentApp()
+				.getFolder('www')
+				.eachEntity(e => console.log(e.name))
+		);
 		const webview = this.$refs.web.nativeView;
 		const WVInterface = new WebViewInterface(webview);
 		WVInterface.start().then(() => {
-			WVInterface.runJSFunc('happy', { msg: 'okay' });
+			WVInterface.runJSFunc('happy', { msg: 'okay' }, data => console.log(data));
 		});
 	}
 };

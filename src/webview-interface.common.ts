@@ -16,7 +16,7 @@ export class WebViewInterfaceCommon implements WebViewInterface {
         })
     }
 
-    parseJSON(data: string): Array<Object> | Object {
+    parseJSON(data: string): Object[] | Object {
         let result;
         try {
             result = JSON.parse(data) as any;
@@ -30,15 +30,15 @@ export class WebViewInterfaceCommon implements WebViewInterface {
         this.webView.notify({ eventName, object: this.webView, data });
     }
 
-    on(eventName: string, callback: () => void) {
+    on(eventName: string, callback: (data: Object[] | Object) => void) {
         this.webView.on(eventName, callback)
     }
 
-    off(eventName: string, callback: () => void) {
+    off(eventName: string, callback: (data: Object[] | Object) => void) {
         this.webView.off(eventName, callback)
     }
 
-    once(eventName: string, callback: () => void) {
+    once(eventName: string, callback: (data: Object[] | Object) => void) {
         this.webView.once(eventName, callback)
     }
 
