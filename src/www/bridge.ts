@@ -35,7 +35,7 @@ class Bridge {
         if (Android) {
             Android.emit(name, params)
         } else if (iOS) {
-            iOS.emit(name, params)
+            iOS.postMessage({ name, data })
         } else {
             console.error("Cannot find Bridge object")
         }

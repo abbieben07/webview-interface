@@ -1,5 +1,5 @@
 
-import { Device, WebView } from "@nativescript/core";
+import { Device, EventData, WebView } from "@nativescript/core";
 import { WebViewInterfaceCommon } from "./webview-interface.common";
 
 // @ts-ignore
@@ -28,6 +28,7 @@ export class WebViewInterface extends WebViewInterfaceCommon {
     runJSFunc(fname: string, arg: Object, callback: (data: Object[] | Object) => void) {
         const params = JSON.stringify(arg);
         if (callback) {
+            // @ts-ignore
             this.once(fname, ({ data }) => callback(data));
         }
         const caller = `Bridge.call('${fname}', '${params}');`;
