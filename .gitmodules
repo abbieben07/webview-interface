@@ -18,7 +18,7 @@ ignore = dirty
 path = tools
 url = https://github.com/nativescript-community/plugin-seed-tools.git
 ignore = dirty
-[submodule "android-generator"]
-path = android-generator
+[submodule "android-dts-generator"]
+path = android-dts-generator
 url = https://github.com/NativeScript/android-dts-generator.git
 ignore = dirty

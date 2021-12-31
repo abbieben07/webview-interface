@@ -1,4 +1,4 @@
-import { WebView } from "@nativescript/core";
+import { Device, WebView } from "@nativescript/core";
 import { WebViewInterfaceCommon } from "./webview-interface.common";
 export class WebViewInterface extends WebViewInterfaceCommon {
     constructor(webView) {
@@ -14,6 +14,15 @@ export class WebViewInterface extends WebViewInterfaceCommon {
         }
     }
     setupWebView() {
+        const config = this.webView.nativeViewProtected.configuration;
+        config.dataDetectorTypes = -1;
+        if (Device.sdkVersion >= '14.0') {
+            config.defaultWebpagePreferences.allowsContentJavaScript = true;
+        }
+        else {
+            config.preferences.javaScriptEnabled = true;
+        }
+        config.userContentController.addScriptMessageHandlerName(JavascriptInterface.init(new WeakRef(this)), "iOS");
     }
     runJSFunc(fname, arg, callback) {
         const params = JSON.stringify(arg);
@@ -21,9 +30,10 @@ export class WebViewInterface extends WebViewInterfaceCommon {
             this.once(fname, ({ data }) => callback(data));
         }
         const caller = `Bridge.call('${fname}', '${params}');`;
-        this.webView.nativeViewProtected.evaluateJavaScriptCompletionHandler(caller, null);
+        this.webView.nativeViewProtected.evaluateJavaScriptCompletionHandler('happy()', (data, error) => console.log("Return", data, "Error", error));
     }
 }
+//@ObjCClass([WKScriptMessageHandler])
 var JavascriptInterface = /** @class */ (function (_super) {
     __extends(JavascriptInterface, _super);
     function JavascriptInterface() {
@@ -39,9 +49,7 @@ var JavascriptInterface = /** @class */ (function (_super) {
         var webViewInterface = this.webViewInterface.get();
         webViewInterface.emit(name, data);
     };
-    JavascriptInterface = __decorate([
-        ObjCClass([WKScriptMessageHandler])
-    ], JavascriptInterface);
+    JavascriptInterface.ObjCProtocols = [WKScriptMessageHandler];
     return JavascriptInterface;
 }(NSObject));
 //# sourceMappingURL=webview-interface.ios.js.map

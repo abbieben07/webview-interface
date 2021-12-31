@@ -32,8 +32,9 @@
         "submodules": "git submodule update --init",
         "sync": "node ./tools/sync.js -w && npx sort-package-json",
         "sync.test": "node ./tools/sync.js",
-        "typings":"",
-        "tsc": "cpy '**/*.d.ts' '../plugin' --parents --cwd=src && cpy '**/*.{aar,jar,java}' '../plugin' --parents --cwd=src && tsc -skipLibCheck -d",
+        "types.ios": "cd ./demo-vue && TNS_TYPESCRIPT_DECLARATIONS_PATH=\"$(pwd)/../types/ios\" tns build ios",
+        "types.android": "cd ./demo-vue && TNS_TYPESCRIPT_DECLARATIONS_PATH=\"$(pwd)/../types/android\" tns build android",
+        "tsc": "cpy '**/*.d.ts' '../plugin' --parents --cwd=src &&  tsc -skipLibCheck -d",
         "watch": "npm run tsc -- -w"
     },
     "devDependencies": {

@@ -1,5 +1,5 @@
-import { Device, WebView } from "@nativescript/core";
-import { WebViewInterfaceCommon } from "./webview-interface.common";
+import { Device, WebView } from '@nativescript/core';
+import { WebViewInterfaceCommon } from './webview-interface.common';
 export class WebViewInterface extends WebViewInterfaceCommon {
     constructor(webView) {
         super(webView);
@@ -15,8 +15,10 @@ export class WebViewInterface extends WebViewInterfaceCommon {
     }
     setupWebView() {
         this.webView.nativeViewProtected.getSettings().setJavaScriptEnabled(true);
+        this.webView.nativeViewProtected.getSettings().setAllowFileAccess(true);
+        this.webView.nativeViewProtected.getSettings().setAllowContentAccess(true);
         const JSInterface = new JavascriptInterface(new WeakRef(this));
-        this.webView.nativeViewProtected.addJavascriptInterface(JSInterface, "Android");
+        this.webView.nativeViewProtected.addJavascriptInterface(JSInterface, 'Android');
     }
     runJSFunc(fname, arg, callback) {
         const params = JSON.stringify(arg);

@@ -1,6 +1,5 @@
-
-import { Device, EventData, WebView } from "@nativescript/core";
-import { WebViewInterfaceCommon } from "./webview-interface.common";
+import { Device, WebView } from '@nativescript/core';
+import { WebViewInterfaceCommon } from './webview-interface.common';
 
 // @ts-ignore
 declare var com: any;
@@ -20,9 +19,11 @@ export class WebViewInterface extends WebViewInterfaceCommon {
     }
 
     public setupWebView() {
-        (this.webView.nativeViewProtected as android.webkit.WebView).getSettings().setJavaScriptEnabled(true)
+        (this.webView.nativeViewProtected as android.webkit.WebView).getSettings().setJavaScriptEnabled(true);
+        (this.webView.nativeViewProtected as android.webkit.WebView).getSettings().setAllowFileAccess(true);
+        (this.webView.nativeViewProtected as android.webkit.WebView).getSettings().setAllowContentAccess(true);
         const JSInterface = new JavascriptInterface(new WeakRef(this));
-        (this.webView.nativeViewProtected as android.webkit.WebView).addJavascriptInterface(JSInterface, "Android");
+        (this.webView.nativeViewProtected as android.webkit.WebView).addJavascriptInterface(JSInterface, 'Android');
     }
 
     runJSFunc(fname: string, arg: Object, callback: (data: Object[] | Object) => void) {
@@ -34,16 +35,15 @@ export class WebViewInterface extends WebViewInterfaceCommon {
         const caller = `Bridge.call('${fname}', '${params}');`;
         console.log(caller);
         if (Device.sdkVersion >= '19') {
-            (this.webView.nativeView as android.webkit.WebView).evaluateJavascript(caller, null)
+            (this.webView.nativeView as android.webkit.WebView).evaluateJavascript(caller, null);
         } else {
-            (this.webView.nativeView as android.webkit.WebView).loadUrl(`javascript: ${caller}`)
+            (this.webView.nativeView as android.webkit.WebView).loadUrl(`javascript: ${caller}`);
         }
     }
 }
 
 @NativeClass()
 class JavascriptInterface extends com.novacio.WebviewInterface {
-
     constructor(private webViewInterface: WeakRef<WebViewInterface>) {
         super();
         return global.__native(this);
@@ -54,4 +54,4 @@ class JavascriptInterface extends com.novacio.WebviewInterface {
         const data = webViewInterface.parseJSON(jsonData);
         webViewInterface.emit(eventName, data);
     }
-}  
+}

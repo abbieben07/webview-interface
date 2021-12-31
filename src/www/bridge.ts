@@ -24,7 +24,7 @@ class Bridge {
     }
 
     public static call(name: string, data: string, callback?: Function) {
-        console.log(data);
+        console.log("Bridge", name, data);
         const fn: Function = window[name];
         const params = this.parseJSON(data);
         if (typeof fn === "function") fn(params);

@@ -6,7 +6,7 @@
 		</ActionBar>
 
 		<StackLayout>
-			<WebView ref="web" src="~/assets/www/index.html" />
+			<WebView :javascriptEnabled="true" ref="web" src="~/assets/www/index.html" />
 		</StackLayout>
 	</Page>
 </template>
@@ -20,12 +20,12 @@ export default {
 			knownFolders
 				.currentApp()
 				.getFolder('www')
-				.eachEntity(e => console.log(e.name))
+				.eachEntity((e) => console.log(e.name))
 		);
 		const webview = this.$refs.web.nativeView;
 		const WVInterface = new WebViewInterface(webview);
 		WVInterface.start().then(() => {
-			WVInterface.runJSFunc('happy', { msg: 'okay' }, data => console.log(data));
+			WVInterface.runJSFunc('happy', { msg: 'okay' }, (data) => console.log(data));
 		});
 	}
 };
